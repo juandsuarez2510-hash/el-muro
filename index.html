@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muro · Juanelo & Yayiz</title>
+
+<!-- Tailwind CSS vía CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- FontAwesome (iconos) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- Tipografías: Sora (display) + Inter (cuerpo) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Configuración de la paleta custom de Tailwind -->
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          abyss: '#0f172a',
+          slateglass: '#1e293b',
+          violet: { DEFAULT: '#8b5cf6', soft: 'rgba(139,92,246,0.35)' },
+          cyanx:  { DEFAULT: '#14b8a6', soft: 'rgba(20,184,166,0.35)' }
+        },
+        fontFamily: {
+          display: ['Sora', 'sans-serif'],
+          body: ['Inter', 'sans-serif']
+        }
+      }
+    }
+  }
+</script>
+
+<!-- Hoja de estilos propia (glassmorphism, animaciones, tema oscuro) -->
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-aurora min-h-screen text-slate-100 font-body antialiased">
+
+<!-- ==========================================================================
+     PANTALLA 1: LOGIN
+     ========================================================================== -->
+<section id="login-screen" class="min-h-screen w-full flex items-center justify-center px-4 py-10">
+  <div class="w-full max-w-md anim-in">
+    <div class="text-center mb-8">
+      <div class="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-violet to-cyanx flex items-center justify-center shadow-glow-violet float-glow mb-4">
+        <i class="fa-solid fa-note-sticky text-2xl text-white"></i>
+      </div>
+      <h1 class="font-display font-800 text-3xl tracking-tight text-white">El Muro</h1>
+      <p class="text-slate-400 text-sm mt-1">Un rincón compartido, solo para dos.</p>
+    </div>
+
+    <form id="login-form" class="glass rounded-2xl p-7 shadow-glow-violet space-y-5">
+      <div>
+        <label class="block text-xs uppercase tracking-wider text-slate-400 mb-2">Usuario</label>
+        <div class="relative">
+          <i class="fa-solid fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+          <input id="login-user" type="text" autocomplete="username" placeholder="Juanelo o Yayiz"
+            class="w-full bg-slate-900/60 border border-slate-700 focus:border-violet focus:ring-2 focus:ring-violet/40 rounded-xl py-3 pl-11 pr-4 outline-none transition placeholder:text-slate-600" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs uppercase tracking-wider text-slate-400 mb-2">Contraseña</label>
+        <div class="relative">
+          <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+          <input id="login-pass" type="password" autocomplete="current-password" placeholder="••••••••••••"
+            class="w-full bg-slate-900/60 border border-slate-700 focus:border-cyanx focus:ring-2 focus:ring-cyanx/40 rounded-xl py-3 pl-11 pr-4 outline-none transition placeholder:text-slate-600" />
+        </div>
+      </div>
+
+      <p id="login-error" class="hidden text-sm text-rose-400 bg-rose-500/10 border border-rose-500/30 rounded-lg px-3 py-2">
+        <i class="fa-solid fa-triangle-exclamation mr-1"></i> Usuario o contraseña incorrectos.
+      </p>
+
+      <button type="submit"
+        class="w-full font-display font-600 bg-gradient-to-r from-violet to-cyanx hover:brightness-110 active:scale-[0.98] transition rounded-xl py-3 text-white shadow-glow-violet flex items-center justify-center gap-2">
+        <span>Entrar al muro</span>
+        <i class="fa-solid fa-arrow-right-long"></i>
+      </button>
+    </form>
+
+    <p class="text-center text-slate-600 text-xs mt-6">Sesión guardada localmente en este dispositivo.</p>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     PANTALLA 2: MURO (oculta hasta iniciar sesión)
+     ========================================================================== -->
+<section id="app-screen" class="hidden min-h-screen w-full">
+
+  <!-- Header fijo -->
+  <header class="sticky top-0 z-30 glass border-b border-slate-800/60">
+    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-violet to-cyanx flex items-center justify-center">
+          <i class="fa-solid fa-note-sticky text-white text-sm"></i>
+        </div>
+        <h1 class="font-display font-700 text-lg text-white hidden sm:block">El Muro</h1>
+      </div>
+
+      <div class="flex items-center gap-2 flex-1 max-w-md">
+        <div class="relative flex-1">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+          <input id="search-input" type="text" placeholder="Buscar notas…"
+            class="w-full bg-slate-900/60 border border-slate-700 focus:border-violet focus:ring-2 focus:ring-violet/30 rounded-full py-2 pl-9 pr-3 text-sm outline-none transition placeholder:text-slate-600" />
+        </div>
+        <div class="relative">
+          <input id="date-filter" type="date"
+            class="bg-slate-900/60 border border-slate-700 focus:border-cyanx focus:ring-2 focus:ring-cyanx/30 rounded-full py-2 px-3 text-sm outline-none transition text-slate-300" />
+        </div>
+        <button id="clear-filters" title="Limpiar filtros"
+          class="hidden shrink-0 w-9 h-9 rounded-full bg-slate-800/70 hover:bg-slate-700 border border-slate-700 text-slate-300 text-sm transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <div id="current-user-badge" class="hidden sm:flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full bg-slate-900/50 border border-slate-700"></div>
+        <button id="logout-btn" title="Cerrar sesión"
+          class="w-9 h-9 rounded-full bg-slate-800/70 hover:bg-rose-500/20 hover:text-rose-400 border border-slate-700 transition flex items-center justify-center">
+          <i class="fa-solid fa-right-from-bracket text-sm"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 py-6 pb-24">
+
+    <!-- Compositor de nueva nota -->
+    <div class="glass rounded-2xl p-4 sm:p-5 shadow-glow-violet mb-8 anim-fade">
+      <div class="flex items-start gap-3">
+        <div id="composer-avatar" class="shrink-0 w-11 h-11 rounded-full flex items-center justify-center font-display font-700 text-white"></div>
+        <div class="flex-1 min-w-0">
+          <textarea id="note-input" rows="2" placeholder="¿Qué piensas? ¿Cómo te sientes?"
+            class="w-full resize-none bg-transparent text-slate-100 placeholder:text-slate-500 outline-none text-[15px] leading-relaxed"></textarea>
+
+          <!-- Previsualización de adjuntos pendientes -->
+          <div id="pending-attachments" class="flex flex-wrap gap-2 mt-2"></div>
+
+          <div class="flex items-center justify-between mt-3 pt-3 border-t border-slate-700/50">
+            <div class="flex items-center gap-1">
+              <button id="attach-file-btn" title="Adjuntar archivo"
+                class="w-9 h-9 rounded-full hover:bg-violet/15 hover:text-violet text-slate-400 transition flex items-center justify-center">
+                <i class="fa-solid fa-paperclip"></i>
+              </button>
+              <input id="file-input" type="file" class="hidden" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.png,.jpg,.jpeg" multiple />
+
+              <button id="attach-link-btn" title="Adjuntar enlace"
+                class="w-9 h-9 rounded-full hover:bg-cyanx/15 hover:text-cyanx text-slate-400 transition flex items-center justify-center">
+                <i class="fa-solid fa-link"></i>
+              </button>
+            </div>
+
+            <button id="publish-btn"
+              class="font-display font-600 text-sm bg-gradient-to-r from-violet to-cyanx hover:brightness-110 active:scale-[0.97] transition rounded-full px-5 py-2 text-white flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+              <span>Publicar</span>
+              <i class="fa-solid fa-paper-plane text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feed de notas -->
+    <div id="notes-feed" class="space-y-4"></div>
+
+    <!-- Estado vacío -->
+    <div id="empty-state" class="hidden text-center py-16 empty-illustration">
+      <i class="fa-regular fa-comments text-5xl text-slate-600 mb-4"></i>
+      <p class="text-slate-500 font-display">Todavía no hay nada por aquí.</p>
+      <p class="text-slate-600 text-sm mt-1">Escribe lo que piensas y dale a publicar.</p>
+    </div>
+
+    <!-- Estado sin resultados de búsqueda -->
+    <div id="no-results-state" class="hidden text-center py-16">
+      <i class="fa-solid fa-magnifying-glass-minus text-5xl text-slate-600 mb-4"></i>
+      <p class="text-slate-500 font-display">Sin resultados para tu búsqueda.</p>
+      <p class="text-slate-600 text-sm mt-1">Prueba con otra palabra o quita el filtro de fecha.</p>
+    </div>
+  </main>
+</section>
+
+<!-- Modal de "adjuntar enlace" -->
+<div id="link-modal" class="hidden fixed inset-0 z-50 items-center justify-center bg-slate-950/70 backdrop-blur-sm px-4">
+  <div class="glass rounded-2xl p-6 w-full max-w-sm anim-in shadow-glow-cyan">
+    <h3 class="font-display font-700 text-white mb-3 flex items-center gap-2"><i class="fa-solid fa-link text-cyanx"></i> Adjuntar enlace</h3>
+    <input id="link-input" type="url" placeholder="https://ejemplo.com"
+      class="w-full bg-slate-900/60 border border-slate-700 focus:border-cyanx focus:ring-2 focus:ring-cyanx/30 rounded-xl py-2.5 px-4 text-sm outline-none transition placeholder:text-slate-600 mb-4" />
+    <div class="flex gap-2 justify-end">
+      <button id="link-cancel" class="px-4 py-2 rounded-xl text-sm text-slate-400 hover:text-slate-200 transition">Cancelar</button>
+      <button id="link-confirm" class="px-4 py-2 rounded-xl text-sm bg-cyanx hover:brightness-110 text-white font-600 transition">Agregar</button>
+    </div>
+  </div>
+</div>
+
+<!-- SDK de Supabase: necesario solo si activas la sincronización en la nube
+     (ver CLOUD_CONFIG en app.js). Si no la configuras, la app sigue
+     funcionando 100% local sin problema. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Lógica de la aplicación (login, notas, adjuntos, búsqueda, filtros) -->
+<script src="app.js"></script>
+</body>
+</html>
